@@ -2,7 +2,7 @@
 session_start();
 include "db_connection.php";
 
-error_reporting(0);
+
 if(!isset($_SESSION["ROLE"])){
 	header("location:login.php");
     die();
@@ -11,25 +11,24 @@ if(!isset($_SESSION["ROLE"])){
 
 $Q1 = "SELECT * FROM `department_table`";
 $result1 = mysqli_query($conn,$Q1);
-$count1 = mysqli_num_rows($result1);	
+$count1 = mysqli_num_rows($result1);
 
-
+	
 
 $id 			= 	$_GET["id"];
-$first_name 	=	$_GET["first_name"];
-$last_name 		=	$_POST["last_name"];
-$joining_date	=	$_POST["joining_date"];
-$age_name 		=	$_POST["age_name"];
-$contact 		=	$_POST["contact"];
-$department 	=	$_POST["department"];
-$country 		=	$_POST["country"];
-$email 			=	$_POST["email"];
-
+$fname			=	$_GET["firstname"];
+$lname 			=	$_GET["lastname"];
+$joindate		=	$_GET["joindate"];
+$age_name 		=	$_GET["age_name"];
+$contact 		=	$_GET["contact"];
+$department 	=	$_GET["department"];
+$country 		=	$_GET["country"];
+$email 			=	$_GET["email"];
 
 
 if(isset($_POST["update"])){
-	
-	$first_name 	=	$_GET["first_name"];
+		
+	$first_name 	=	$_POST["first_name"];
 	$last_name 		=	$_POST["last_name"];
 	$joining_date	=	$_POST["joining_date"];
 	$age_name 		=	$_POST["age_name"];
@@ -38,20 +37,24 @@ if(isset($_POST["update"])){
 	$country 		=	$_POST["country"];
 	$email 			=	$_POST["email"];
 
-	
-	$q1 = "UPDATE `client_table` SET `first_name`='$first_name',`last_name`='$last_name',`joining_date`=$joining_date,
-	`age_name`='$age_name',`contact`='$contact ',`department`='$department',`country`='$country ',`email`='$email' WHERE id='$id'";
+
+	$q1 = "UPDATE `client_table` SET first_name='$first_name',last_name='$last_name',joining_date='$joining_date',
+	age_name='$age_name',contact='$contact',department='$department',country='$country',email='$email' WHERE id='$id'";
 	
 	$result = mysqli_query($conn,$q1);
-													
+											
 	if($result){
 		echo '<script>alert("Client Updated Successfully ")</script>';
 		}
-		else{
-			echo '<script>alert("Failed to update ")</script>';
-			}
+	else{
+		echo '<script>alert("Failed to update ")</script>';
+		}
 
+	
 }
+
+
+
 
 ?>
 
@@ -107,7 +110,7 @@ if(isset($_POST["update"])){
                                                         <label class="small mb-1" for="inputFirstName">First Name</label>
                                                            
                                                         <input class="form-control py-2" id="inputFirstName" type="text" 
-                                                        placeholder="Enter first name" name="first_name"  value="<?php echo $first_name;?>"/>
+                                                        placeholder="Enter first name" name="first_name"  value="<?php echo $fname;?>"/>
                                                      
                                                     </div>
                                                 </div>
@@ -116,7 +119,7 @@ if(isset($_POST["update"])){
                                                         <label class="small mb-1" for="inputLastName">Last Name</label>
                                                         
                                                         <input class="form-control py-2" id="inputLastName" type="text" 
-                                                        placeholder=" " name="last_name"  value="<?php echo $last_name;?>"/>
+                                                        placeholder=" " name="last_name"  value="<?php echo $lname;?>"/>
                                                         
                                                     </div>
                                                 </div>
@@ -128,7 +131,7 @@ if(isset($_POST["update"])){
                                                         <label class="small mb-1" for="inputFirstName">Date of joining *</label>
                                                         
                                                         <input class="form-control py-2" id="inputFirstName" type="Date" 
-                                                         value="<?php echo $joining_date;?>" name="joining_date" />
+                                                         value="<?php echo $joindate;?>" name="joining_date" />
                                                          
                                                     </div>
                                                 </div>
@@ -137,7 +140,7 @@ if(isset($_POST["update"])){
                                                         <label class="small mb-1" for="inputLastName">Agency Name*</label>
                                                         
                                                         <input class="form-control py-2" id="inputLastName" type="text" 
-                                                        placeholder="Agency Name"   name="age_name" value="<?php echo $age_name;?>"/>
+                                                        name="age_name" value="<?php echo $age_name;?>"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,9 +159,9 @@ if(isset($_POST["update"])){
 												<div class="form-group">
 													<label class="small mb-1" for="inputLastName">Department*</label>
 													
-													<select class="form-control" name="department" >
+													<select class="form-control" name="department" value="<?php echo $department;?>" >
 														department:
-														<option class="hidden" value="">Department</option>														
+														<option class="hidden" value=""><?php echo $department;?></option>														
 
 														<?php for($i=1;$i<=$count1;$i++){
 															$data = mysqli_fetch_assoc($result1);?>
@@ -190,7 +193,7 @@ if(isset($_POST["update"])){
                                        
                                             <div class="form-group mt-2 mb-2">
 												<div class="col-md-12">
-													<input type="submit" value="Create Employee" class="btn btn-primary btn-block" name="submit">												
+													<input type="submit" value="Update Client" class="btn btn-primary btn-block" name="update">												
 												</div>
 												
                                             </div>
@@ -208,8 +211,7 @@ if(isset($_POST["update"])){
                 <!-- footer start  -->
                 <?php include "footer.php";
                 ?> 
-                
-                
+ 
 
             </div>
         </div>
@@ -225,5 +227,8 @@ if(isset($_POST["update"])){
         <script src="assets/demo/datatables-demo.js"></script>
     </body>
 </html>
+
+
+
 
 

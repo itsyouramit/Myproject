@@ -5,10 +5,10 @@ $q1 = "SELECT * FROM `client_table`";
 $result = mysqli_query($conn,$q1);
 $rowcount = mysqli_num_rows($result);
 
+
+
+
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,9 +35,9 @@ $rowcount = mysqli_num_rows($result);
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Dashboard</h1>
+                        <h1 class="mt-4" style="text-align:center;">Client List</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item active">Client Table</li>
                         </ol>
 
 
@@ -75,7 +75,7 @@ $rowcount = mysqli_num_rows($result);
 												<td><?php echo $rows["age_name"]?></td>
 												<td>
 													<btn>
-														<a class="btn btn-primary" href="update_client.php?id=<?php echo $rows["id"];?>&first_name=<?php echo $rows["first_name"]?>&last_name=<?php echo $rows["last_name"]?>&joining_date=<?php echo $rows["joining_date"]?>
+														<a class="btn btn-primary" href="update_client.php?id=<?php echo $rows["id"];?>&firstname=<?php echo $rows["first_name"]?>&lastname=<?php echo $rows["last_name"]?>&joindate=<?php echo $rows["joining_date"]?>
 														&age_name=<?php echo $rows["age_name"]?>&contact=<?php echo $rows["contact"]?>
 														&department=<?php echo $rows["department"]?>&country=<?php echo $rows["country"]?>
 														&email=<?php echo $rows["email"];?>">Update</a>

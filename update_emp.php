@@ -1,9 +1,10 @@
 <?php 
 session_start();
 include_once "db_connection.php";
-include_once "function.php";
+//include_once "function.php";
 
 
+error_reporting(0);
 if(!isset($_SESSION["ROLE"])){
 	header("location:login.php");
     die();
@@ -16,7 +17,11 @@ $Q1 = "SELECT * FROM `department_table`";
 $result1 = mysqli_query($conn,$Q1);
 $count1 = mysqli_num_rows($result1);
 
+// fetching data from role table 
 
+$Q2 = "SELECT * FROM `role_table`";
+$result2 = mysqli_query($conn,$Q2);
+$count2 = mysqli_num_rows($result2);
 
 $Q3 = "SELECT * FROM `employee_table`";
 $result3 = mysqli_query($conn,$Q3);
@@ -26,128 +31,59 @@ $count4 =$count3+1;
 
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
-	$first_name 	= 	$_POST["first_name"];
-    $last_name		= 	$_POST["last_name"];
-    $joining_date 	= 	$_POST["joining_date"];
-    $age_name 		= 	$_POST["age_name"];
-    $contact 		= 	$_POST["contact"];
-    $department 	= 	$_POST["department"];
-    $country 		= 	$_POST["country"];
-    $email 			= 	$_POST["email"];
-   	
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+
+
+
+
+$id 			= 	$_GET["id"];
+$firstname 		=	$_GET["firstname"];
+$lastname 		=	$_GET["lastname"];
+$joining_date 	= 	$_GET["joining_date"];
+$emp_id 		= 	$_GET["emp_id"];
+$dob 			= 	$_GET["dob"];
+$department 	= 	$_GET["department"];
+$role 			= 	$_GET["role"];
+$email 			= 	$_GET["email"]; 
+
+
+
+
+if(isset($_POST["update"])){
+	$firstname 		=	$_POST["first_name"];
+	$lastname 		=	$_POST["last_name"];
+	$joining_date 	= 	$_POST["joining_date"];
+	$emp_id 		= 	$_POST["emp_id"];
+	$dob 			= 	$_POST["dob"];
+	$email	 		= 	$_POST["email"];
+	$department 	= 	$_POST["department"];
+	$role 			= 	$_POST["role"];
+			
+		 
+	$q1 = "UPDATE `employee_table` SET `firstname`='$firstname ',`lastname`='$lastname ',`joining_date`='$joining_date',`emp_id`='$emp_id',
+	`dob`='$dob',`department`='$department',`role`='$role',`email`='$email'WHERE id=$id";
+	$result = mysqli_query($conn,$q1);
+
+		if($result){
+		echo '<script>alert("Employee Updated Successfully ")</script>'; 	
+		}else{
+		echo '<script>alert("Failed to update ")</script>';
+		}
 	
-	$error=[];
-	
-
-		
-		if (empty($_POST["first_name"])) {
-			$error[] = "First Name is required";
-			} else {
-			$first_name = test_input($_POST["first_name"]);
-			
-			if (!preg_match("/^[a-zA-Z]*$/",$first_name)){
-			$error[] = "Only letters allowed";
-			}
-		}	
-
-		
-		if (empty($_POST["last_name"])) {
-			$error[] = "Last Name is required";
-			} else {
-			$last_name = test_input($_POST["last_name"]);
-			
-			if (!preg_match("/^[a-zA-Z]*$/",$last_name)){
-			$error[] = "Only letters allowed";
-			}
-		}
-		
-		
-		if (empty($_POST["age_name"])) {
-			$error[] = "Agency Name is required";
-			} else {
-			$age_name = test_input($_POST["age_name"]);
-			
-			if (!preg_match("/^[a-zA-Z]*$/",$age_name)){
-			$error[] = "Only letters allowed";
-			}
-		}
-		
-		
-		if (empty($_POST["contact"])) {
-			$error[] = "Contact No. is required";
-			} else {
-			$contact = test_input($_POST["contact"]);
-
-		}
-		
-		
-		if (empty($_POST["country"])) {
-			$error[] = "Country Name is required";
-			} else {
-			$country = test_input($_POST["country"]);
-			
-			if (!preg_match("/^[a-zA-Z]*$/",$country)){
-			$error[] = "Only letters allowed";
-			}
-		}				
-					
-
-		
-		//email
-		if (empty($_POST["email"])) {
-		$error[] = "Email is required";
-		} 
-		if($sql = "SELECT * FROM client_table WHERE email ='$email'")
-			$result =mysqli_query ($conn,$sql);
-
-			if(mysqli_num_rows($result)> 0){
-			$error[]= 'email is used';
-		}
-		else {
-		$email = test_input($_POST["email"]);
-		}			
+}	
 
 
-		//join
-		if (empty($_POST["joining_date"])) {
-			$error[] = "joining is required";
-			} else {
-			$joining_date = test_input($_POST["joining_date"]);
-		}
-		
 
-		
-		if (empty($_POST["department"])) {
-			$error[] = "department is required";
-			} else {
-			$department = test_input($_POST["department"]);
-			}		  
 
-				  
-	
-		if(sizeOf($error)<=0)
-		{
-			
-		$q1 = "INSERT INTO `client_table`(`first_name`, `last_name`, `joining_date`, `age_name`, `contact`, `department`, `country`, `email`) 
-		VALUES ('$first_name','$last_name','$joining_date','$age_name','$contact','$department','$country','$email')";
-		$q2 = mysqli_query($conn, $q1);
-			
-			if($q2){
-				echo '<script>alert ("Data Inserted sucessfully")</script>';
-				}else{
-					echo '<script>alert ("failed to register")</script>';
-					}	
-			
-		} 
-		else{
-			$error[]="Error".mysqli_error($conn);
-		}
-		
-	}			
-				
-	
+
+
 
 
 	
@@ -183,18 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-3">
-									
-							<?php if(isset($error) && sizeOf($error)>0){ ?>
-							<div class="error"> 
-							<?php foreach($error as $error_message){ 
-							echo $error_message."<br>";
-							} ?>
-
-							</div>
-							<?php } ?>
-									
-									
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-2">Add Client</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-2">Update Employee</h3></div>
                                     <div class="card-body">
                                         <form method="POST">
                                             <div class="form-row">
@@ -203,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                                         <label class="small mb-1" for="inputFirstName">First Name</label>
                                                            
                                                         <input class="form-control py-2" id="inputFirstName" type="text" 
-                                                        placeholder="Enter first name" name="first_name"  value="<?php echo $first_name;?>"/>
+                                                         value="<?php echo $firstname;?>" name="first_name" />
                                                      
                                                     </div>
                                                 </div>
@@ -212,7 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                                         <label class="small mb-1" for="inputLastName">Last Name</label>
                                                         
                                                         <input class="form-control py-2" id="inputLastName" type="text" 
-                                                        placeholder="Last Name" name="last_name"  value="<?php echo $last_name;?>"/>
+                                                        placeholder="<?php echo $lastname;?>" value="<?php echo $lastname;?>" 
+                                                        name="last_name" />
                                                         
                                                     </div>
                                                 </div>
@@ -223,17 +149,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputFirstName">Date of joining *</label>
                                                         
-                                                        <input class="form-control py-2" id="inputFirstName" type="Date" 
+                                                        <input class="form-control py-2" id="inputFirstName" type="text" 
+                                                        placeholder="<?php echo $joining_date;?>" value="<?php echo $joining_date;?>" 
                                                         name="joining_date" />
                                                          
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputLastName">Agency Name*</label>
+                                                        <label class="small mb-1" for="inputLastName">Employee ID*</label>
                                                         
                                                         <input class="form-control py-2" id="inputLastName" type="text" 
-                                                        placeholder="Agency Name"   name="age_name" value="<?php echo $age_name;?>"/>
+                                                        placeholder=""  value="<?php echo $emp_id;?>" name="emp_id" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -241,10 +168,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                             <div class="form-row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputFirstName">Contact*</label>
+                                                        <label class="small mb-1" for="inputFirstName">Date of Birth*</label>
                                                        
-                                                        <input class="form-control" id="inputFirstName" type="text" placeholder="Contact" name="contact" 
-                                                        value="<?php echo $contact;?>"/>
+                                                        <input class="form-control" id="inputFirstName" type="text" 
+                                                         placeholder="<?php echo $dob;?>" value="<?php echo $dob;?>" name="dob" />
                                                     </div>
                                                 </div>
                                              
@@ -252,9 +179,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 												<div class="form-group">
 													<label class="small mb-1" for="inputLastName">Department*</label>
 													
-													<select class="form-control" name="department" >
+													<select class="form-control" name="department" placeholder="<?php echo $department;?>"  required >
 														department:
-														<option class="hidden" value="">Department</option>														
+														<option class="hidden"  ><?php echo $department;?></option>														
 
 														<?php for($i=1;$i<=$count1;$i++){
 															$data = mysqli_fetch_assoc($result1);?>
@@ -268,10 +195,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                              
                                              <div class="col-md-4">
 												<div class="form-group">
-													<label class="small mb-1" for="inputLastName">Country*</label>
+													<label class="small mb-1" for="inputLastName">Select Role*</label>
 													
-													<input class="form-control py-2" id="inputLastName" type="text" 
-                                                        placeholder="Country Name"   name="country" value="<?php echo $country;?>"/>
+													<select class="form-control" name="role" required>
+														role:
+														<option class="hidden"  ><?php echo $role;?></option>
+														
+														<?php for($j=1;$j<=$count2;$j++){
+															$data2 = mysqli_fetch_assoc($result2);
+															?>														
+															<option name="catagory" value="<?php echo $data2["role"];?>" ><?php echo $data2["role"]; ?></option>
+															<?php } ?>
+														
+													</select>
 												</div>
                                              </div>
                                       
@@ -281,12 +217,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                                                 <label class="small mb-1" for="inputEmailAddress">Email*</label>
                                                 
                                                 <input class="form-control py-2" id="inputEmailAddress" type="email" aria-describedby="emailHelp" 
-                                                placeholder="Enter email address" name="email" value="<?php echo $email;?>"/>
+                                                placeholder="<?php echo $email;?>" value="<?php echo $email;?>" name="email" />
                                             </div>
-                                       
+                                            <div class="form-row">
+                             
+                                            </div>
                                             <div class="form-group mt-2 mb-2">
 												<div class="col-md-12">
-													<input type="submit" value="Create Employee" class="btn btn-primary btn-block" name="submit">												
+													<input type="submit" value="Update Employee" class="btn btn-primary btn-block" name="update">												
 												</div>
 												
                                             </div>
@@ -301,7 +239,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     </div>
                 </main>
-
+                  <div>
+					<?php echo $ErrorMsg;?><br>
+					<?php echo $nameErr1;?><br>
+					<?php echo $nameErr2;?><br>
+					<?php echo $dateErr; ?><br>
+					
+					<?php echo $idErr;?><br>
+					<?php echo $dobErr;?><br>
+					<?php echo $depErr; ?><br>
+					<?php echo $rolErr;?><br>
+					<?php echo $emailErr;?><br>
+					<?php echo $passErr;?>
+				</div>
                 <!-- footer start  -->
                 <?php include "footer.php"; ?> 
 
@@ -319,11 +269,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         <script src="assets/demo/datatables-demo.js"></script>
     </body>
 </html>
-
-
-
-
-
-
-
 
