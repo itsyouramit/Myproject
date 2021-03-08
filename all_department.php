@@ -44,6 +44,8 @@ $rowcount = mysqli_num_rows($result);
 								<tr>
 								  <th scope="col">Serial No</th>
 								  <th scope="col">Department Name</th>
+								  <th scope="col">Update</th>
+								  <th scope="col">Delete</th>								  
 								</tr>
 							  </thead>
 							  <tbody>

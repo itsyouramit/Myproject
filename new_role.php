@@ -1,27 +1,33 @@
 <?php 
 session_start();
 include_once "db_connection.php";
+include_once "function.php";
 
 if(isset($_POST["submit"])){
     
     $role = ucfirst($_POST["role"]);
     
-	$rol = "SELECT * FROM role_table WHERE role='$role'";
-	$res = mysqli_query($conn, $rol);
-	$rows = mysqli_num_rows($res);
-	
-	if($rows>0){
-		echo '<script>alert("Role Already Exist ")</script>'; 	
-		}else{
-			$q3 = "INSERT INTO role_table (role) VALUES('$role')";
-			$q4 = mysqli_query($conn, $q3);
-					
-			if($q4){
-				echo '<script>alert("Role Created Successfully ")</script>'; 	
-			}else{
-				echo '<script>alert("Failed to create")</script>';	
-				} 
-			}
+    
+    
+    $error=validate_role($conn);
+    
+    
+    if(sizeOf($error)<=0)
+		{
+			
+			$q1 = "INSERT INTO role_table (role) VALUES('$role')";
+			$q2 = mysqli_query($conn, $q1);
+			
+			if($q2){
+				echo '<script>alert ("Data Inserted sucessfully")</script>';
+				}else{
+					echo '<script>alert ("failed to register")</script>';
+					}	
+			
+		}
+		else{
+			$error[]="Error".mysqli_error($conn);
+		}
 	}
 ?>
 
@@ -74,6 +80,15 @@ if(isset($_POST["submit"])){
 											</div>
 											
                                         </form>
+                                        
+                            <?php if(isset($error) && sizeOf($error)>0){ ?>
+							<div class="error"> 
+							<?php foreach($error as $error_message){ 
+							echo $error_message."<br>";
+							} ?>
+
+							</div>
+							<?php } ?>
                                     </div>
                                   </div>
                                 </div>

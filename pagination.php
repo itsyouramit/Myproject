@@ -29,6 +29,15 @@ $q1 = "SELECT * FROM employee_table LIMIT $record_per_page OFFSET $start_no";
 $query = mysqli_query($conn,$q1);
 $data = mysqli_fetch_array($query);
 
+
+
+
+
+
+
+
+
+
 ?>
 
 

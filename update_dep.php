@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "db_connection.php";
+include "function.php";
 
 $id = $_GET["id"];
 $dep =$_GET["dep"];
@@ -8,16 +9,22 @@ $dep =$_GET["dep"];
 
 if(isset($_POST["update"])){
 	$dep =$_POST["department"];
-	$q1 = "UPDATE department_table SET department='$dep' WHERE id='$id'";
-	$result = mysqli_query($conn,$q1);
-
-														
-if($result){
-	echo '<script>alert("Department Updated Successfully ")</script>';
-	}
-	else{
-		echo '<script>alert("Failed to update ")</script>';
-		}
+	$error = validate_dep($conn);
+	
+	if(sizeof($error) <= 0){
+		
+		$q1 = "UPDATE department_table SET department='$dep' WHERE id='$id'";
+		$result = mysqli_query($conn,$q1);
+		
+		if($result){
+			echo '<script>alert("Department Updated Successfully ")</script>';
+			}
+			else{
+				echo '<script>alert("Failed to update ")</script>';
+				}				
+		}else{
+			echo "Error".mysqli_error($conn);
+			}
 
 }
 
@@ -74,6 +81,16 @@ if($result){
                                         </form>
                                         <!--form end-->
                                     </div>
+                                    
+                             <?php if(isset($error) && sizeOf($error)>0){ ?>
+							<div class="error"> 
+							<?php foreach($error as $error_message){ 
+							echo $error_message."<br>";
+							} ?>
+
+							</div>
+							<?php } ?>
+                                    
                                   </div>
                                 </div>
                               </div>

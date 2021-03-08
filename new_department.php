@@ -1,27 +1,32 @@
 <?php 
 session_start();
 include_once "db_connection.php";
+include_once "function.php";
 
 if(isset($_POST["submit"])){
     
     $department_name = ucfirst($_POST["department"]);
     
-    $Q1 = "SELECT * FROM department_table WHERE department='$department_name'";
-    $Q2 = mysqli_query($conn,$Q1);
-    $res = mysqli_num_rows($Q2);
+     $error=validate_dep($conn);
+
     
-	if($res>0){
-		echo '<script>alert("Department Already Exist ")</script>';
-		}else{
-			$q1 = "INSERT INTO department_table (department) VALUES('$department_name')";
-			$q2 = mysqli_query($conn, $q1);	
-			
-			if($q2){
-					echo '<script>alert("Department Created Successfully ")</script>'; 	
-				}else{
-					echo '<script>alert("Failed to create  ")</script>';	
-					} 		
+    	if(sizeOf($error) <= 0)
+		{	
+		$q1 = "INSERT INTO department_table (department) VALUES('$department_name')";
+		$q2 = mysqli_query($conn, $q1);
+		
+		if($q2){
+			echo '<script>alert("Department Created Successfully ")</script>'; 
+			}else{
+				echo '<script>alert("Failed to create  ")</script>';
+				}		
+		} 
+		else{
+			$error[]="Error".mysqli_error($conn);
 			}
+    
+    
+
 	}
 ?>
 
@@ -75,6 +80,14 @@ if(isset($_POST["submit"])){
                                         </form>
                                         <!--form end-->
                                     </div>
+                            <?php if(isset($error) && sizeOf($error)>0){ ?>
+							<div class="error"> 
+							<?php foreach($error as $error_message){ 
+							echo $error_message."<br>";
+							} ?>
+
+							</div>
+							<?php } ?>
                                   </div>
                                 </div>
                               </div>

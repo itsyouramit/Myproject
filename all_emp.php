@@ -12,6 +12,11 @@ $q1 = "SELECT * FROM `employee_table`";
 $result = mysqli_query($conn,$q1);
 $rowcount = mysqli_num_rows($result);
 
+
+
+
+
+
 ?>
 
 
@@ -58,6 +63,7 @@ $rowcount = mysqli_num_rows($result);
                                         <thead>
                                             <tr>
                                                 <th>SL No.</th>
+                                                <th>id</th>
                                                 <th>Name</th>
                                                 <th>Department</th>
                                                 <th>Role</th>
@@ -79,7 +85,9 @@ $rowcount = mysqli_num_rows($result);
 											$count++; ?>
 											<tr>
 												<td><?php echo $count;?></td>
+												<td><?php echo $rows["id"]?></td>
 												<td><?php echo $rows["firstname"]?></td>
+												
 												<td><?php echo $rows["department"]?></td>
 												<td><?php echo $rows["role"]?></td>
 												<td>
@@ -100,10 +108,7 @@ $rowcount = mysqli_num_rows($result);
 											
 										<?php } ?>                             
                                             
-                                            
-                                            
                                         </tbody>
-                                        
                                         
                                     </table>
                                     

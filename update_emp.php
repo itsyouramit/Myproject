@@ -1,10 +1,10 @@
 <?php 
 session_start();
 include_once "db_connection.php";
-//include_once "function.php";
+include_once "function.php";
 
 
-error_reporting(0);
+//error_reporting(0);
 if(!isset($_SESSION["ROLE"])){
 	header("location:login.php");
     die();
@@ -31,18 +31,6 @@ $count4 =$count3+1;
 
 
 
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-
-
-
-
-
 $id 			= 	$_GET["id"];
 $firstname 		=	$_GET["firstname"];
 $lastname 		=	$_GET["lastname"];
@@ -66,28 +54,30 @@ if(isset($_POST["update"])){
 	$department 	= 	$_POST["department"];
 	$role 			= 	$_POST["role"];
 			
-		 
-	$q1 = "UPDATE `employee_table` SET `firstname`='$firstname ',`lastname`='$lastname ',`joining_date`='$joining_date',`emp_id`='$emp_id',
-	`dob`='$dob',`department`='$department',`role`='$role',`email`='$email'WHERE id=$id";
-	$result = mysqli_query($conn,$q1);
+	
+	
+	$error=update_emp($conn);
+		
+	if(sizeOf($error)<=0)
+		{
+			
+		$q1 = "UPDATE `employee_table` SET `firstname`='$firstname ',`lastname`='$lastname ',`joining_date`='$joining_date',`emp_id`='$emp_id',
+		`dob`='$dob',`department`='$department',`role`='$role',`email`='$email'WHERE id=$id";
+		$result = mysqli_query($conn,$q1);
 
-		if($result){
-		echo '<script>alert("Employee Updated Successfully ")</script>'; 	
+			if($result){
+			echo '<script>alert("Employee Updated Successfully ")</script>'; 	
+			}else{
+			echo '<script>alert("Failed to update ")</script>';
+			}	
+			
 		}else{
-		echo '<script>alert("Failed to update ")</script>';
+			$error[]="Error".mysqli_error($conn);
 		}
 	
 }	
 
 
-
-
-
-
-
-
-	
- 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,6 +109,17 @@ if(isset($_POST["update"])){
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-3">
+									
+						<?php if(isset($error) && sizeOf($error)>0){ ?>
+							<div class="error"> 
+							<?php foreach($error as $error_message){ 
+							echo $error_message."<br>";
+							} ?>
+
+							</div>
+							<?php } ?>
+									
+									
                                     <div class="card-header"><h3 class="text-center font-weight-light my-2">Update Employee</h3></div>
                                     <div class="card-body">
                                         <form method="POST">

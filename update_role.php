@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "db_connection.php";
+include "function.php";
 
 $id = $_GET["id"];
 $role =$_GET["role"];
@@ -8,17 +9,24 @@ $role =$_GET["role"];
 
 if(isset($_POST["update"])){
 	$role =$_POST["role"];
-	$q1 = "UPDATE role_table SET role='$role' WHERE id='$id'";
-	$result = mysqli_query($conn,$q1);
+	
+	$error=validate_role($conn);
 
-														
-if($result){
-	echo '<script>alert("Role Updated Successfully ")</script>';
-	}
-	else{
-		echo '<script>alert("Failed to update ")</script>';
-		}
-
+		if(sizeOf($error)<=0)
+		{
+			$q1 = "UPDATE role_table SET role='$role' WHERE id='$id'";
+			$result = mysqli_query($conn,$q1);												
+			if($result){
+				echo '<script>alert("Role Updated Successfully ")</script>';
+				}
+				else{
+					echo '<script>alert("Failed to update ")</script>';
+					}
+			
+		}else{
+			$error[]="Error".mysqli_error($conn);
+			} 	
+	
 }
 
 ?>
@@ -76,6 +84,15 @@ if($result){
                                         </form>
                                         <!--form end-->
                                     </div>
+                            <?php if(isset($error) && sizeOf($error)>0){ ?>
+							<div class="error"> 
+							<?php foreach($error as $error_message){ 
+							echo $error_message."<br>";
+							} ?>
+
+							</div>
+							<?php } ?>
+                                    
                                   </div>
                                 </div>
                               </div>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "db_connection.php";
+include "function.php";
 
 
 if(!isset($_SESSION["ROLE"])){
@@ -38,18 +39,28 @@ if(isset($_POST["update"])){
 	$email 			=	$_POST["email"];
 
 
+
+	$error=validate_client($conn);
+	
+	if(sizeOf($error)<=0)
+		{
+			
 	$q1 = "UPDATE `client_table` SET first_name='$first_name',last_name='$last_name',joining_date='$joining_date',
 	age_name='$age_name',contact='$contact',department='$department',country='$country',email='$email' WHERE id='$id'";
 	
 	$result = mysqli_query($conn,$q1);
-											
-	if($result){
-		echo '<script>alert("Client Updated Successfully ")</script>';
-		}
-	else{
-		echo '<script>alert("Failed to update ")</script>';
-		}
-
+			
+		if($result){
+			echo '<script>alert("Client Updated Successfully ")</script>';
+			}
+		else{
+			echo '<script>alert("Failed to update ")</script>';
+			}	
+			
+		}else{
+			$error[]="Error".mysqli_error($conn);
+			
+			}
 	
 }
 

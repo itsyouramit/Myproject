@@ -1,7 +1,6 @@
 <?php 
-
-
 include_once "db_connection.php";
+
 
 function AllDepartment($conn,$query){  
 	 
@@ -80,130 +79,7 @@ function Employee($conn,$query){
 
 
 
-function clear_data($data){
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
-}
 
-
-function valid_first_name($data){
-		if (empty($_POST["first_name"])) {
-		$nameError = "Name is required";
-		} else {
-		$first_name = clear_data($_POST["first_name"]);
-		
-		if (!preg_match("/^[a-zA-Z-]*$/",$first_name)) {
-		$nameError = "Only letters allowed";
-		}
-		}
-	
-	}
-
-
-
-function validate_first_name($data){
-	if (empty($_POST['first_name'])) {
-	$nameError1 = "first name is required";
-	}else{
-		$first_name = clear_data($_POST['first_name']);
-		if (!preg_match("/^[a-zA-Z]*$/", $first_name)) {
-			$nameError1 = "Only letters are allowed";
-		}elseif (preg_match("/^[a-zA-Z]*$/", $first_name)) {
-			return $first_name = clear_data($_POST['first_name']);	
-		}
-		return $nameError1;
-	}
-	return $nameError1;
-}
-
-
-function validate_last_name($data){
-	if (empty($_POST['last_name'])) {
-	$nameError = "Last name is required";
-	}else{
-		$last_name = clear_data($_POST['last_name']);
-		if (!preg_match("/^[a-zA-Z]*$/", $last_name)) {
-			$nameError1 = "Only letters are allowed";
-		}elseif (preg_match("/^[a-zA-Z]*$/", $last_name)) {
-			return $first_name = clear_data($_POST['last_name']);	
-		}
-		return $nameError;
-	}
-	return $nameError;
-}
-
-
-
-function validate_joining_date($data){
-	if (empty($_POST['joining_date'])) {
-		$nameError = "joining_date is required";
-	}else{
-		return $joining_date   =   clear_data($_POST["joining_date"]);
-	}
-	return $nameError;
-}
-
-
-function validate_emp_id($data){
-	if (empty($_POST['emp_id'])) {
-		$nameError = "emp_id is required";
-	}else{
-		return $emp_id   =   clear_data($_POST["emp_id"]);
-	}
-	return $nameError;
-}
-
-
-
-function validate_dob($data){
-	if (empty($_POST['dob'])) {
-		$nameError = "dob is required";
-	}else{
-		return $dob   =   clear_data($_POST["dob"]);
-	}
-	return $nameError;
-}
-
-
-
-function validate_dep($data){
-	if (empty($_POST['department'])) {
-		$nameError = "Select Department";
-	}else{
-		return $department   =   clear_data($_POST["department"]);
-	}
-	return $nameError;
-}
-
-
-function validate_role($data){
-	if (empty($_POST['role'])) {
-		$nameError = "Select Role";
-	}else{
-		return $role   =   clear_data($_POST["role"]);
-	}
-	return $nameError;
-}
-
-
-
-function validate_email($data){
-	if (empty($_POST['email'])) {
-		$nameError = "email is required";
-	}else{
-		$email   =   clear_data($_POST["email"]);
-		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return $email   =   clear_data($_POST["email"]);
-		}
-		return $nameError = "Invalid Formate";
-	}
-	return $nameError;
-}
-
-
-	
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -215,6 +91,369 @@ function test_input($data) {
 }
 
 
+//function to validate department
+
+function validate_dep($conn){
+
+	$department  = $_POST['department'];
+	$error=[];
+
+    if(empty($_POST['department'])){
+        $error[]="Department Is Required";
+        
+    }elseif ($sql = "SELECT * FROM department_table WHERE department ='$department'") {
+        $result =mysqli_query ($conn,$sql);  
+        if(mysqli_num_rows($result)> 0){
+           $error[]= 'Department already Exist';   
+        } else{
+            $department = test_input($_POST["department"]);
+
+            if (!preg_match("/^[a-zA-Z ]*$/",$department)){
+            $error[] = "Only letters allowed";
+            } 
+        } 
+    }
+    return $error;
+}
+
+
+
+//function to validate role
+
+function validate_role($conn){
+
+	$role  = $_POST['role'];
+	$error=[];
+
+    if(empty($_POST['role'])){
+        $error[]="Role Is Required";
+        
+    }elseif ($sql = "SELECT * FROM role_table WHERE role ='$role'") {
+        $result =mysqli_query ($conn,$sql);  
+        if(mysqli_num_rows($result)> 0){
+           $error[]= 'Role already Exist';   
+        } else{
+            $role = test_input($_POST["role"]);
+
+            if (!preg_match("/^[a-zA-Z ]*$/",$role)){
+            $error[] = "Only letters allowed";
+            } 
+        } 
+    }
+    return $error;
+}
+
+
+
+//Function to validate client
+
+function validate_client($conn){
+	
+	$error=[];
+
+		if (empty($_POST["first_name"])) {
+			$error[] = "First Name is required";
+			} else {
+			$first_name = test_input($_POST["first_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$first_name)){
+			$error[] = "Only letters allowed";
+			}
+		}	
+
+		
+		if (empty($_POST["last_name"])) {
+			$error[] = "Last Name is required";
+			} else {
+			$last_name = test_input($_POST["last_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$last_name)){
+			$error[] = "Only letters allowed";
+			}
+		}
+		
+		
+		if (empty($_POST["age_name"])) {
+			$error[] = "Agency Name is required";
+			} else {
+			$age_name = test_input($_POST["age_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$age_name)){
+			$error[] = "Only letters allowed";
+			}
+		}
+		
+		
+		if (empty($_POST["contact"])) {
+			$error[] = "Contact No. is required";
+			} else {
+			$contact = test_input($_POST["contact"]);
+
+		}
+		
+		
+		if (empty($_POST["country"])) {
+			$error[] = "Country Name is required";
+			} else {
+			$country = test_input($_POST["country"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$country)){
+			$error[] = "Only letters allowed";
+			}
+		}				
+					
+
+		if(empty($_POST["email"])){
+			$error[] = "Email is required";
+			}elseif($sql = "SELECT * FROM client_table WHERE email ='".$_POST["email"]."'"){
+					$result =mysqli_query ($conn,$sql);
+					if(mysqli_num_rows($result)> 0){
+						$error[]= 'email is used';
+						}else{
+							$email = test_input($_POST["email"]);
+							if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+								$error[] = "Invalid email format";
+								}
+							}
+				}
+		
+
+
+		if (empty($_POST["joining_date"])) {
+			$error[] = "joining is required";
+			} else {
+			$joining_date = test_input($_POST["joining_date"]);
+		}
+		
+
+		
+		if (empty($_POST["department"])) {
+			$error[] = "department is required";
+			} else {
+			$department = test_input($_POST["department"]);
+			}		  
+
+		return $error;
+
+	}
+	
+
+
+//function to validate employee
+
+function validate_emp($conn){
+	$error=[];
+	
+
+		
+		if (empty($_POST["first_name"])) {
+			$error[] = "First Name is required";
+			} else {
+			$first_name = test_input($_POST["first_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$first_name)){
+			$error[] = "Only letters allowed";
+			}
+		}	
+
+		
+		if (empty($_POST["last_name"])) {
+			$error[] = "Last Name is required";
+			} else {
+			$last_name = test_input($_POST["last_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$last_name)){
+			$error[] = "Only letters allowed";
+			}
+		}	
+
+		
+		if (empty($_POST["joining_date"])) {
+			$error[] = "joining is required";
+			} else {
+			$joining_date = test_input($_POST["joining_date"]);
+		}
+		
+		
+		if (empty($_POST["emp_id"])) {
+			$error[] = "employee id is required";
+			} else {
+			$emp_id = test_input($_POST["emp_id"]);
+		   }						
+			
+	
+		
+		if (empty($_POST["dob"])) {
+			$error[] = "DOB is required";
+			} else {
+			$dob = test_input($_POST["dob"]);
+			}
+
+		
+		if (empty($_POST["department"])) {
+			$error[] = "department is required";
+			} else {
+			$department = test_input($_POST["department"]);
+			}		  
+
+		if (empty($_POST["role"])) {
+			$error[] = "Select role";
+			} else {
+			$role = test_input($_POST["role"]);
+			}
+			
+		
+
+			
+		if (empty($_POST["password1"])) {
+			$error[] = "Enter password";
+			} else {
+			$password1 = test_input($_POST["password1"]);
+			}
+								  
+		if (empty($_POST["password2"])) {
+			$error[] = "Confirm password";
+			} else {
+			$password2 = test_input($_POST["password2"]);
+			}	
+	
+		if ($_POST["password1"] !== $_POST["password2"]) {
+			$error[] = 'Password or Confirm password should match!';
+			}else{
+			$password1 = test_input($_POST["password1"]);
+			}	
+			
+			
+		if(empty($_POST["email"])){
+			$error[] = "Email is required";
+			}elseif($sql = "SELECT * FROM employee_table WHERE email ='".$_POST["email"]."'"){
+					$result =mysqli_query ($conn,$sql);
+					if(mysqli_num_rows($result)> 0){
+						$error[]= 'email is used';
+						}else{
+							$email = test_input($_POST["email"]);
+							if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+								$error[] = "Invalid email format";
+								}
+							}
+				}
+							
+		
+		return $error;
+	
+	}
+
+
+//function to update employee
+
+function update_emp($conn){
+	$error=[];
+	
+
+		
+		if (empty($_POST["first_name"])) {
+			$error[] = "First Name is required";
+			} else {
+			$first_name = test_input($_POST["first_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$first_name)){
+			$error[] = "Only letters allowed";
+			}
+		}	
+
+		
+		if (empty($_POST["last_name"])) {
+			$error[] = "Last Name is required";
+			} else {
+			$last_name = test_input($_POST["last_name"]);
+			
+			if (!preg_match("/^[a-zA-Z]*$/",$last_name)){
+			$error[] = "Only letters allowed";
+			}
+		}	
+
+		
+		if (empty($_POST["joining_date"])) {
+			$error[] = "joining is required";
+			} else {
+			$joining_date = test_input($_POST["joining_date"]);
+		}
+		
+		
+		if (empty($_POST["emp_id"])) {
+			$error[] = "employee id is required";
+			} else {
+			$emp_id = test_input($_POST["emp_id"]);
+		   }						
+			
+	
+		
+		if (empty($_POST["dob"])) {
+			$error[] = "DOB is required";
+			} else {
+			$dob = test_input($_POST["dob"]);
+			}
+
+		
+		if (empty($_POST["department"])) {
+			$error[] = "department is required";
+			} else {
+			$department = test_input($_POST["department"]);
+			}		  
+
+		if (empty($_POST["role"])) {
+			$error[] = "Select role";
+			} else {
+			$role = test_input($_POST["role"]);
+			}	
+			
+
+				
+		if(empty($_POST["email"])){
+			$error[] = "Email is required";
+			}elseif($sql = "SELECT * FROM employee_table WHERE email ='".$_POST["email"]."'"){
+					$result =mysqli_query ($conn,$sql);
+					if(mysqli_num_rows($result)> 0){
+						$error[]= 'email is used';
+						}else{
+							$email = test_input($_POST["email"]);
+							if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+								$error[] = "Invalid email format";
+								}
+							}
+				}
+		
+		
+				
+		return $error;
+	
+	}
+
+
+function pagination($conn){
+	
+	
+	$q1 = "SELECT * FROM `employee_table`";
+	$result = mysqli_query($conn,$q1);
+	$rowcount = mysqli_num_rows($result);
+
+	$record_per_page = 6;
+	$all_emp=emp_count($conn);
+
+	$total_page=ceil($all_emp/$record_per_page);
+
+	if(isset($_GET["page"]) && $_GET["page"]!=1)
+	{
+		$start_no = ($_GET["page"]-1)*$record_per_page;
+		}
+		else{
+			$start_no=0;
+		}
+
+	return $start_no;
+
+
+	}
 	
 	
 
