@@ -36,14 +36,6 @@ error_reporting(0);
                 
                 
 
-
-                                
-                
-                
-                
-                
-                
-                
                 
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                     <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
@@ -64,7 +56,9 @@ error_reporting(0);
 
 
                     </nav>
-                </div>
+                </div> 
+                
+            
 
                  <?php if ($_SESSION["ROLE"] == 1) { ?>
                   
@@ -86,22 +80,31 @@ error_reporting(0);
                 <a class="nav-link" href="all_client.php">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Client List
+                </a> 
+                
+                <a class="nav-link" href="add_project.php">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                   Add Project 
                 </a>                
                 
                 <?php } ?>
-                
-                
-                
-                
-                
-                
-                
-                
+
+                <a class="nav-link" href="all_project.php">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                   Project Detail 
+                </a> 
+	
+	
                 
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
+			
+		
+			
+            <div class="small">Logged in : <?php echo $_SESSION["USERNAME"];?></div>
+            
+             
             
         </div>
     </nav>

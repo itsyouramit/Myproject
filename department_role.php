@@ -5,6 +5,20 @@ $q1 = "SELECT * FROM `role_table`";
 $result = mysqli_query($conn,$q1);
 $rowcount = mysqli_num_rows($result);
 
+
+$record_per_page = 5;
+
+$total_page=ceil($rowcount/$record_per_page);
+
+if(isset($_GET["page"]) && $_GET["page"]!=1)
+{
+	$start_no = ($_GET["page"]-1)*$record_per_page;
+	}
+	else{
+		$start_no=0;
+	}
+
+
 ?>
 
 
@@ -68,9 +82,16 @@ $rowcount = mysqli_num_rows($result);
 							  <tbody>
 								  
 									<?php
-										$count=1;
-										for($i=1; $i<=$rowcount; $i++){
-										$rows = mysqli_fetch_array($result); ?>
+									
+									$q1 = "SELECT * FROM role_table LIMIT $record_per_page OFFSET $start_no";
+									$query = mysqli_query($conn,$q1);
+									
+									
+																		
+										
+										while($rows = mysqli_fetch_array($query)){
+											$count++;
+										?>
 	
 										<tr>
 										<td><?php echo $count; ?></td>
@@ -81,12 +102,17 @@ $rowcount = mysqli_num_rows($result);
 
 										</tr>
 									<?php 
-									$count++;
 									} ?>
 		
 							  </tbody>
 							</table>
-
+                                    <div style="text-align:center;">
+                                     <?php 
+										for($page_no = 1; $page_no<= $total_page; $page_no++) {  	
+										echo '<a href = "department_role.php?page=' . $page_no . '">' . $page_no . ' </a>';
+										}
+									?>                                    
+                                    </div>
                     </div>
                 </main>
                 <!-- footer start  -->

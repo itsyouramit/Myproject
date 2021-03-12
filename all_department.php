@@ -1,9 +1,29 @@
 <?php
 session_start();
 include "db_connection.php";
+
+
+
 $q1 = "SELECT * FROM `department_table`";
 $result = mysqli_query($conn,$q1);
 $rowcount = mysqli_num_rows($result);
+
+
+$record_per_page = 5;
+
+$total_page=ceil($rowcount/$record_per_page);
+
+if(isset($_GET["page"]) && $_GET["page"]!=1)
+{
+	$start_no = ($_GET["page"]-1)*$record_per_page;
+	}
+	else{
+		$start_no=0;
+	}
+
+
+
+
 
 ?>
 
@@ -50,11 +70,16 @@ $rowcount = mysqli_num_rows($result);
 							  </thead>
 							  <tbody>
 							     <?php
-									$count=1;
-									for($i=1; $i<=$rowcount; $i++){
-									$rows = mysqli_fetch_array($result); ?>
+									$q1 = "SELECT * FROM department_table LIMIT $record_per_page OFFSET $start_no";
+									$query = mysqli_query($conn,$q1);
+									
+									
+
+									while($rows = mysqli_fetch_array($query)){
+										$count++;  ?>
 										<tr>
-											<td><?php echo $count;?></td>
+											<td><?php echo $count?></td>
+											
 											<td><?php echo $rows["department"]?></td>
 										<td ><btn><a  class="btn btn-primary" href="update_dep.php?id=<?php echo $rows["id"];?>&dep=<?php echo $rows["department"]?>">Update</a></btn></td>							
 										
@@ -63,13 +88,17 @@ $rowcount = mysqli_num_rows($result);
 										</tr>
 										
 									<?php 
-									$count++;
-										} 
-									?>
+										} ?>
 							  </tbody>
 							</table>
-
-                    </div>
+                                    <div style="text-align:center;">
+                                     <?php 
+										for($page_no = 1; $page_no<= $total_page; $page_no++) {  	
+										echo '<a href = "all_department.php?page=' . $page_no . '">' . $page_no . ' </a>';
+										}
+									?>                                    
+                                    </div>
+				</div>
                 </main>
                 <!-- footer start  -->
                 <?php include "footer.php"; ?> 

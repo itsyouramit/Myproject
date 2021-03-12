@@ -63,7 +63,7 @@ $rowcount = mysqli_num_rows($result);
                                         <thead>
                                             <tr>
                                                 <th>SL No.</th>
-                                                <th>id</th>
+                                               
                                                 <th>Name</th>
                                                 <th>Department</th>
                                                 <th>Role</th>
@@ -85,7 +85,7 @@ $rowcount = mysqli_num_rows($result);
 											$count++; ?>
 											<tr>
 												<td><?php echo $count;?></td>
-												<td><?php echo $rows["id"]?></td>
+												
 												<td><?php echo $rows["firstname"]?></td>
 												
 												<td><?php echo $rows["department"]?></td>

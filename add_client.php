@@ -28,10 +28,10 @@ $count4 =$count3+1;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
-	$first_name 	= 	$_POST["first_name"];
-    $last_name		= 	$_POST["last_name"];
+	$first_name 	= 	ucfirst($_POST["first_name"]);
+    $last_name		= 	ucfirst($_POST["last_name"]);
     $joining_date 	= 	$_POST["joining_date"];
-    $age_name 		= 	$_POST["age_name"];
+    $age_name 		= 	ucfirst($_POST["age_name"]);
     $contact 		= 	$_POST["contact"];
     $department 	= 	$_POST["department"];
     $country 		= 	$_POST["country"];

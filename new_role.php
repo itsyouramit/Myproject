@@ -5,7 +5,7 @@ include_once "function.php";
 
 if(isset($_POST["submit"])){
     
-    $role = ucfirst($_POST["role"]);
+    $role = strtoupper($_POST["role"]);
     
     
     

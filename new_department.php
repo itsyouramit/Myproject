@@ -5,7 +5,7 @@ include_once "function.php";
 
 if(isset($_POST["submit"])){
     
-    $department_name = ucfirst($_POST["department"]);
+    $department_name = strtoupper($_POST["department"]);
     
      $error=validate_dep($conn);
 
